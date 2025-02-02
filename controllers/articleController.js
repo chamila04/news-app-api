@@ -33,7 +33,7 @@ const createArticle = async (req, res, next) => {
 
 const getArticles = async (req, res, next) => {
   try {
-    const articles = await Article.find().select("-__v");
+    const articles = await Article.find({ status: "accept" }).select("-__v");
 
     res.json({
       count: articles.length,
