@@ -1,5 +1,5 @@
-const Article = require('../models/Article');
-const User = require('../models/User');
+const Article = require("../models/Article");
+const User = require("../models/User");
 
 const createArticle = async (req, res, next) => {
   try {
@@ -8,7 +8,7 @@ const createArticle = async (req, res, next) => {
     // Check if user exists
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(404).json({ error: 'User not found' });
+      return res.status(404).json({ error: "User not found" });
     }
 
     const newArticle = new Article({
@@ -17,14 +17,14 @@ const createArticle = async (req, res, next) => {
       tags,
       img,
       article,
-      status: 'pending'
+      status: "pending",
     });
 
     const savedArticle = await newArticle.save();
 
     res.status(201).json({
-      message: 'Article created successfully',
-      article: savedArticle
+      message: "Article created successfully",
+      article: savedArticle,
     });
   } catch (error) {
     next(error);
@@ -33,16 +33,39 @@ const createArticle = async (req, res, next) => {
 
 const getArticles = async (req, res, next) => {
   try {
-    const articles = await Article.find()
-      .select('-__v');
+    const articles = await Article.find().select("-__v");
 
     res.json({
       count: articles.length,
-      articles
+      articles,
     });
   } catch (error) {
     next(error);
   }
 };
 
-module.exports = { createArticle, getArticles };
+const getArticlesByTag = async (req, res, next) => {
+  try {
+    const tag = req.params.tag;
+
+    const articles = await Article.find({
+      tags: tag,
+      status: "accept",
+    }).select("title username tags img article createdAt -_id");
+
+    if (articles.length === 0) {
+      return res.status(404).json({
+        message: "No accepted articles found with this tag",
+      });
+    }
+
+    res.json({
+      count: articles.length,
+      articles,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = { createArticle, getArticles, getArticlesByTag };
