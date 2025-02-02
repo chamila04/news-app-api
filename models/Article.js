@@ -25,8 +25,8 @@ const articleSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: 'null',
-    enum: ['null', 'accept', 'reject']
+    default: 'pending',
+    enum: ['pending', 'accept', 'reject']
   }
 }, { timestamps: true });
 

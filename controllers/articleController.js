@@ -17,7 +17,7 @@ const createArticle = async (req, res, next) => {
       tags,
       img,
       article,
-      status: 'null'
+      status: 'pending'
     });
 
     const savedArticle = await newArticle.save();
