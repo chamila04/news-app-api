@@ -27,6 +27,11 @@ const articleSchema = new mongoose.Schema({
     type: String,
     default: 'pending',
     enum: ['pending', 'accept', 'reject']
+  },
+  feedback: {
+    type: String,
+    default: '',
+    trim: true
   }
 }, { timestamps: true });
 
