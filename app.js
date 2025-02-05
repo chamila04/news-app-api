@@ -5,8 +5,14 @@ const bodyParser = require('body-parser');
 const authRoutes = require('./routes/authRoutes');
 const { errorHandler } = require('./middleware/errorMiddleware');
 const articleRoutes = require('./routes/articleRoutes');
+const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
+
+const cors = require('cors');
+app.use(cors({
+  origin: 'http://localhost:3000'
+}));
 
 // Middleware
 app.use(bodyParser.json());
@@ -15,6 +21,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api/articles', articleRoutes);
+app.use('/api/users', adminRoutes);
 
 // Error handling middleware
 app.use(errorHandler);
