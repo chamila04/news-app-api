@@ -37,16 +37,29 @@ const userSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    default: "null",
-    //enum: [null, 'accept', 'reject']
+    default: 'null'
   }
 }, { timestamps: true });
 
-// Hash password before saving
-userSchema.pre('save', async function (next) {
-  if (!this.isModified('password')) return next();
-  this.password = await bcrypt.hash(this.password, 10);
-  next();
+// Set default status based on type
+userSchema.pre('save', function (next) {
+  if (this.isModified('type')) {
+    if (this.type === 'reporter') {
+      this.status = 'null';
+    } else if (this.type === 'editor') {
+      this.status = 'pending';
+    }
+  }
+  // Hash password before saving
+  if (this.isModified('password')) {
+    bcrypt.hash(this.password, 10, (err, hashedPassword) => {
+      if (err) return next(err);
+      this.password = hashedPassword;
+      next();
+    });
+  } else {
+    next();
+  }
 });
 
 module.exports = mongoose.model('User', userSchema);
