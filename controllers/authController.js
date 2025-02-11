@@ -68,6 +68,7 @@ const loginUser = async (req, res, next) => {
     );
 
     res.json({ 
+      success: true,
       message: 'Login successful',
       type: user.type,
       token, 
