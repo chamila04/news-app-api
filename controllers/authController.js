@@ -31,7 +31,10 @@ const registerUser = async (req, res, next) => {
     const userResponse = user.toObject();
     delete userResponse.password;
 
-    res.status(201).json(userResponse);
+    res.status(201).json({
+      success: true,
+      message: "User Successfully Registered",
+      userResponse});
   } catch (error) {
     next(error);
   }
