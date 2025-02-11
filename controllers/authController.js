@@ -44,18 +44,23 @@ const loginUser = async (req, res, next) => {
     // Find user by username
     const user = await User.findOne({ username });
     if (!user) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ 
+        success: false,
+        message: 'Invalid credentials' });
     }
 
     // Check password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-      return res.status(401).json({ message: 'Invalid credentials' });
+      return res.status(401).json({ 
+        success: false,
+        message: 'Invalid credentials' });
     }
 
     // Check status for editors
     if (user.type === 'editor' && user.status !== 'accept') {
       return res.status(403).json({ 
+        success: false,
         message: 'Editor account not approved' 
       });
     }
