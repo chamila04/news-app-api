@@ -9,6 +9,9 @@ const adminRoutes = require('./routes/adminRoutes');
 
 const app = express();
 
+// Configure JSON payload limit
+app.use(express.json({ limit: '50mb' }));
+
 const cors = require('cors');
 app.use(cors({
   origin: 'http://localhost:3000'
