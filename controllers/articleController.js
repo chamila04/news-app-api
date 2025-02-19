@@ -272,6 +272,37 @@ const updateArticle = async (req, res, next) => {
   }
 };
 
+
+// search accepted articles
+const searchArticles = async (req, res, next) => {
+  try {
+    const query = req.params.query;
+
+    // Search for articles with status "accept" that match the query in title, article content, or tags.
+    const articles = await Article.find({
+      status: "accept",
+      $or: [
+        { title: { $regex: query, $options: "i" } },
+        { article: { $regex: query, $options: "i" } },
+        { tags: { $regex: query, $options: "i" } }
+      ]
+    }).select("title username tags img article createdAt -_id");
+
+    if (!articles || articles.length === 0) {
+      return res.status(404).json({
+        message: "No accepted articles found for the given search query."
+      });
+    }
+
+    res.json({
+      count: articles.length,
+      articles
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   createArticle,
   getArticles,                     // (1) All accepted articles
@@ -285,5 +316,6 @@ module.exports = {
   getArticlesForEditor,
   updateArticleStatus,
   deleteArticle,
-  updateArticle
+  updateArticle,
+  searchArticles
 };

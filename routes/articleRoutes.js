@@ -13,7 +13,8 @@ const {
   getArticlesForEditor,
   updateArticleStatus,
   deleteArticle,
-  updateArticle
+  updateArticle,
+  searchArticles
 } = require('../controllers/articleController');
 const { isEditor } = require('../middleware/authMiddleware');
 
@@ -55,5 +56,8 @@ router.delete('/:id', deleteArticle);
 
 // Update an article by ID
 router.put('/:id', updateArticle);
+
+// Search accepted articles by query
+router.get('/search/:query', searchArticles);
 
 module.exports = router;
