@@ -1,6 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const cors = require('cors');
 const User = require('../models/User');
+
+// Enable all CORS requests
+router.use(cors());
 
 // Get all editors
 router.get('/editors', async (req, res) => {
